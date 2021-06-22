@@ -66,8 +66,9 @@ class GenerateCSV extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /* If an output directory location is not specified, we will write the csv file
-        to the var/ directory.*/
-        $this->outputDirectory = ($input->getArgument('output_directory')) ? $input->getArgument('output_directory') : $this->kernel->getProjectDir() . '/var/';
+        to the var/ directory. We remove and add a trailing slash to ensure one is present
+        in a provided output directory. */
+        $this->outputDirectory = ($input->getArgument('output_directory')) ? rtrim($input->getArgument('output_directory'), "/") . '/' : $this->kernel->getProjectDir() . '/var/';
 
         if(!is_dir($this->outputDirectory))
         {
