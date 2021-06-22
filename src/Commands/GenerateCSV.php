@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-use App\Classes\Staff\PaymentDates;
+use App\Classes\Staff\Payments\PaymentDates;
 
 class GenerateCSV extends Command
 {
@@ -77,7 +77,7 @@ class GenerateCSV extends Command
             return Command::FAILURE;
         }
 
-        $paymentDates = $this->serializer->encode($this->paymentDates->generate(), 'csv', [
+        $paymentDates = $this->serializer->encode($this->paymentDates->getDates(), 'csv', [
             CsvEncoder::NO_HEADERS_KEY => 'no_headers'
         ]);
 
@@ -93,6 +93,8 @@ class GenerateCSV extends Command
         } catch (IOExceptionInterface $exception) {
             echo "An error occurred while creating your directory at " . $exception->getPath();
         }
+
+        $output->writeln("<info>CSV file created - {$fileName}</info>");
 
         return Command::SUCCESS;
     }
