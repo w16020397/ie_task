@@ -13,8 +13,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use Symfony\Component\HttpKernel\KernelInterface;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 use App\Classes\Staff\PaymentDates;
 
@@ -23,17 +30,17 @@ class GenerateCSV extends Command
     protected static $defaultName = "app:generate-csv";
     private string $outputDirectory;
     private PaymentDates $paymentDates;
-
-    /**
-     * @var KernelInterface An instance of the kernel interface.
-     */
     private KernelInterface $kernel;
+    private Serializer $serializer;
+    private Filesystem $filesystem;
 
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct();
 
         $this->kernel = $kernel;
+        $this->serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
+        $this->filesystem = new Filesystem();
         $this->paymentDates = new PaymentDates();
     }
 
@@ -69,7 +76,23 @@ class GenerateCSV extends Command
             return Command::FAILURE;
         }
 
-        var_dump($this->paymentDates->generate());
+        $paymentDates = $this->serializer->encode($this->paymentDates->generate(), 'csv', [
+            CsvEncoder::NO_HEADERS_KEY => 'no_headers'
+        ]);
+
+        try {
+            $fileName = $this->outputDirectory . "dates.csv";
+
+            if($this->filesystem->exists($fileName))
+            {
+                $this->filesystem->remove($fileName);
+            }
+
+            $this->filesystem->dumpFile($fileName, $paymentDates);
+        } catch (IOExceptionInterface $exception) {
+            echo "An error occurred while creating your directory at " . $exception->getPath();
+        }
+
         return Command::SUCCESS;
     }
 }
