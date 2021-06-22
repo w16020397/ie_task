@@ -40,7 +40,7 @@ class BonusPayment extends BasePayment implements PaymentDate
     public function setTimestamp(): void
     {
         $this->date->setTimestamp(
-            strtotime('+9 days', strtotime($this->format))
+            strtotime('+10 days', strtotime($this->format))
         );
     }
 }
