@@ -13,11 +13,29 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
+use App\Classes\Staff\PaymentDates;
 
 class GenerateCSV extends Command
 {
     protected static $defaultName = "app:generate-csv";
-    private string | null $outputDirectory;
+    private string $outputDirectory;
+    private PaymentDates $paymentDates;
+
+    /**
+     * @var KernelInterface An instance of the kernel interface.
+     */
+    private KernelInterface $kernel;
+
+    public function __construct(KernelInterface $kernel)
+    {
+        parent::__construct();
+
+        $this->kernel = $kernel;
+        $this->paymentDates = new PaymentDates();
+    }
 
     /**
      * Configure basic information about the generate-csv command.
@@ -40,8 +58,18 @@ class GenerateCSV extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->outputDirectory = $input->getArgument('output_directory');
+        /* If an output directory location is not specified, we will write the csv file
+        to the var/ directory.*/
+        $this->outputDirectory = ($input->getArgument('output_directory')) ? $input->getArgument('output_directory') : $this->kernel->getProjectDir() . '/var/';
 
+        if(!is_dir($this->outputDirectory))
+        {
+            $output->writeln("<error>Output directory ({$this->outputDirectory}) does not exist.</error>");
+
+            return Command::FAILURE;
+        }
+
+        var_dump($this->paymentDates->generate());
         return Command::SUCCESS;
     }
 }
