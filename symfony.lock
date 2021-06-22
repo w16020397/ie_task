@@ -130,6 +130,9 @@
     "symfony/runtime": {
         "version": "5.4.x-dev"
     },
+    "symfony/serializer": {
+        "version": "5.4.x-dev"
+    },
     "symfony/service-contracts": {
         "version": "v2.4.0"
     },
