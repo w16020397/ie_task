@@ -76,10 +76,12 @@ class GenerateCSV extends Command
             return Command::FAILURE;
         }
 
+        // We set the no headers key here to avoid "0,1" being appended to the start of our results.
         $paymentDates = $this->serializer->encode($this->paymentDates->getDates(), 'csv', [
             CsvEncoder::NO_HEADERS_KEY => 'no_headers'
         ]);
 
+        // Try dump our data to the provided output directory.
         try {
             $fileName = $this->outputDirectory . "dates.csv";
 
@@ -91,6 +93,8 @@ class GenerateCSV extends Command
             $this->filesystem->dumpFile($fileName, $paymentDates);
         } catch (IOExceptionInterface $exception) {
             echo "An error occurred while creating your directory at " . $exception->getPath();
+
+            return Command::FAILURE;
         }
 
         $output->writeln("<info>CSV file created - {$fileName}</info>");
