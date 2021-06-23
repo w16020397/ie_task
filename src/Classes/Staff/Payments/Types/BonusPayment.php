@@ -17,7 +17,7 @@ class BonusPayment extends BasePayment implements PaymentDate
     public function getDate(int $monthIncrement = 0): string
     {
         // Set the format to the first day of the current month, plus any additional months.
-        $this->format = $this->format($this->getBasicSalaryFormat(), $monthIncrement);
+        $this->format = $this->format($this->getBonusSalaryFormat(), $monthIncrement);
         $this->date = $this->date();
         $this->setTimestamp();
         $this->dayNumber = $this->day($this->date);
@@ -40,7 +40,7 @@ class BonusPayment extends BasePayment implements PaymentDate
     public function setTimestamp(): void
     {
         $this->date->setTimestamp(
-            strtotime('+10 days', strtotime($this->format))
+            strtotime('+9 days', strtotime($this->format))
         );
     }
 }
