@@ -14,16 +14,13 @@ class PaymentDates
 {
     private BasicPayment $basicPayment;
     private BonusPayment $bonusPayment;
+    public array $dates = [];
 
     public function __construct()
     {
         $this->basicPayment = new BasicPayment;
         $this->bonusPayment = new BonusPayment;
     }
-
-    public array $dates = [
-        ["Basic Payment", "Bonus Payment", "Period"]
-    ];
 
     /**
      * Gets an array of basic and bonus payment dates.
