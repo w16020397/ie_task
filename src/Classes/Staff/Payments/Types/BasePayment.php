@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * A base class for payment dates.
+ * 
+ * @author Michael Sumner <michaelchrissumner@gmail.com>
+ * @version 0.1 
+ */
 namespace App\Classes\Staff\Payments\Types;
 
 use App\Classes\Staff\Payments\Tools\Formatter;

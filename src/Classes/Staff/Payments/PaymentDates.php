@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A class to generate payment dates.
+ * A class to handle getting the payment dates.
  * 
  * @author Michael Sumner <michaelchrissumner@gmail.com>
  * @version 0.1 

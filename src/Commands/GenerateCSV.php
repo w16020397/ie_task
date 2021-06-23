@@ -6,7 +6,6 @@
  * @author Michael Sumner <michaelchrissumner@gmail.com>
  * @version 0.1 
  */
-
 namespace App\Commands;
 
 use Symfony\Component\Console\Command\Command;

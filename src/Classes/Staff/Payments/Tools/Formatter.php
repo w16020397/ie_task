@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * A class that provides methods that help in formatting a payment date.
+ * 
+ * @author Michael Sumner <michaelchrissumner@gmail.com>
+ * @version 0.1 
+ */
 namespace App\Classes\Staff\Payments\Tools;
 
 class Formatter
